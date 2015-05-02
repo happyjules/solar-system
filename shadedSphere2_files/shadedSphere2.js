@@ -134,8 +134,8 @@ function render()
 {
 
     //Used to characterize the size, orbit, and speed of each planet.
-    var enlarge = [ 1, .4, 1.1, 1.4, .6];
-    var orbit = [ 4, 5, 6, 22];
+    var enlarge = [ 3, .4, 1.1, 1.4, .6];
+    var orbit = [ 10, 5, 6, 22];
     var speed = [6, 3, 1.5, 2];
 
     gl.clear( gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
@@ -162,10 +162,10 @@ for(var x = 0 ; x < 5; x++){
      var sphere = mat4();
     sphere = mult(sphere, translate(positionSun));
      sphere = mult(sphere, viewMatrix);
-   
+     sphere = mult(sphere, scale(enlarge[x], enlarge[x], enlarge[x]));
+        
         if(x > 0){
-        sphere = mult(sphere, scale(enlarge[x], enlarge[x], enlarge[x]));
-        sphere = mult(sphere, rotate( speed[x-1] * time * selfRotateAngle/2, [0, 1, 0]));
+       sphere = mult(sphere, rotate( speed[x-1] * time * selfRotateAngle/2, [0, 1, 0]));
         sphere = mult(sphere, translate(orbit[x-1],0,0));
         if(x == 3)
         {
