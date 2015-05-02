@@ -2,3 +2,6 @@ Name: Julie Murakami
 ID: 404203662
 
 Assignment 2
+I implemented the listed four planets by giving each with their own points and normal arrays to render. However I created a transformation matrix to characterize the size, orbit, and speed as well as the light parameters of the shaders before passing them through the shaders to be drawn. 
+
+I also inplemented one the of the extra credits to draw the moon by transforming its location in respect to the transformation of the blue planet.
