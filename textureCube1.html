@@ -53,13 +53,13 @@ main()
 {
     //Rotate texture of Cube #3 with spinMatrix AND scroll Cube #4 with scrollVec
     if(spinOn == 1 && scroll == 1){
-        vec4 spin =vec4(fTexCoord, 0, 0);
-        spin = spinMatrix * spin;
+        vec4 spin =  spinMatrix * vec4(fTexCoord, 0, 1); 
         gl_FragColor = fColor + texture2D(texture, spin.xy + scrollVec);
     }
     //Only rotate texture of Cube #3
    else if(spinOn == 1){
-        vec4 spin =vec4(fTexCoord, 0, 0);
+        //vec2 coord = fTexCoord - vec2(.5, .5);
+        vec4 spin =vec4(fTexCoord, 0, 1);
         spin = spinMatrix * spin;
         gl_FragColor = fColor + texture2D(texture, spin.xy);
     }

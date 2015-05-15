@@ -268,7 +268,7 @@ var render = function(time){
     if(eye < 0)
         eye =0;
     cameraViewMatrix = lookAt(vec3(0, 0, eye), at, up); 
-    projectionMatrix = perspective( fov, aspect, near, far);
+    projectionMatrix = perspective(fov, aspect, near, far);
 
     gl.uniformMatrix4fv(projectionMatrixLoc, false, flatten(projectionMatrix));
     
@@ -280,7 +280,9 @@ var render = function(time){
 //Draw cube # 3
     //Set spinMatrix to rotate at 15rpm about z-axis since the texture is on the xy plane
     spinMatrix = mat4();
-    spinMatrix= mult(spinMatrix, rotate(time*(9/100), [ 0, 0, 1]));
+    spinMatrix = mult(spinMatrix, translate(vec3( .5, .5, 0)));
+    spinMatrix= mult(spinMatrix, rotate( time*(9/100), [ 0, 0, 1]));
+    spinMatrix = mult(spinMatrix, translate (vec3( -.5, -.5, 0)));
     gl.uniformMatrix4fv(spinMatrixLoc, false, flatten(spinMatrix));
 
     //Cube 3 will not scroll so set the scrollVec to (0,0).
@@ -304,7 +306,7 @@ var render = function(time){
     gl.uniformMatrix4fv(spinMatrixLoc, false, flatten(spinMatrix));
 
     //Set scrollVec to a cosine function of time to continuously scroll left and right.
-    gl.uniform2f(scrollVecLoc, Math.cos(.001 * time), 0);
+    gl.uniform2f(scrollVecLoc, 5* Math.cos(.0005 * time), 0);
 
     //Set cube in model view
     var cube = mat4();
