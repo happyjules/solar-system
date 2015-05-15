@@ -1,0 +1,22 @@
+CS174A Assignment #3
+Julie Murakami
+404203662
+
+Notes:
+	My two textures used are radiator.jpg and pocahontas.jpeg found in the happyjules-a3 directory, which also contains my html file. The Javascript file is located in the textureCube_files. I started this project using the Edward Angel code from Chapter 7. 
+	First, I put the cubes in perspective by creating the modelViewMatrix, CameraViewMatrix, and projectionView. I places two cubes off-centered from the x-axis by 4 units from the origin. Next, I tried to create two separate texture for the two cubes. I found out that I could initialize the textures in the onload function but should only let the texture be binded in the render function so the two cubes can have different textures. 
+	I ran into trouble sizing the images since it was not a power of 2. I found superResizeme.com useful in resizing the pocahontas pictures so it could render. There is a color buffer from the Edward Angel code that makes each face of the cube a different color. However, I ended up changing the colors to all black, so the textures are shown in their designated colors.
+	
+	For the non-zoomed cube, I used the image of pocahontas. In order to implement nearest-neighbor, I used gl.NEAREST for the minimum and mag filter. I did not indicate whether the texture should clamp or repeat because this texture should fill up the whole face of the cube since its texCoord are [0,1].
+	For the zoomed cube by 50%, I first set the texture parameters to repeat and used LINEAR_MIPMAP_LINEAR to get trilinear filtering for the radiator imaged cube. In order to get the texture zoomed out by 50%, I created a new variable zoom to interchange the texCoord with values beyond [0,1]. Since we want it 50% and I wanted it centered, I added .25 to each side. 
+
+	The camera is initially looking down the z-axis to the origin. Thus to move the camera close and farther from the cubes using i and o, I changed the z-value of the camera, which is the eye variable in my code. The view get weird when the image is behind the camera, I limited the camera to only get as close up to the near which is close to 0. 
+
+
+Extra Credit:
+#1      By pressing r, one can toggle rotating cube #3(pocahontas) about the y-axis and cube #4 (radiator) about the x-axis. In order to implement this, I passed the time variable in the render to store that milliseconds it takes to render each frame since the program start. I multiplied cube#3's rotation about by time*(6/100) since by following the post on piazza about converting milliseconds/runtime to revolutions/minute was time* [(10*360)/(60*1000)], which simplifies to 6/100 for 10rpm. Thus for cube #4 which rotates at 5rpm, I just divided the above factor by 2 and got 3/100. 
+
+#2    By pressing t, the pocahontas cube Cube #3 will rotate its texture coordinates so it looks like the texture is spinning. I was able to implement this by passing a mat4 called spinMatrix into the fragment shader and applied it to the fTexCoords. In order to make it rotate at 15rpm, I used the knowledge from above that 5rpm is 3/100 so 15rpm = 3*(3/100) = 9/100;
+
+#3    By pressing s, the radiator cube Cube #4 will animate its texture y making it scroll side to side in a cosine motion dependent on time. In order to accomplish this, I passed a vec2 names scrollVec into the fragment shader and translated the fTexCoord. 
+      	       

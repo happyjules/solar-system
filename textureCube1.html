@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=windows-1252"><style type="text/css">
+    canvas {}
+</style>
+
+</head><body onkeydown="keyPressed(event);">
+
+
+<script id="vertex-shader" type="x-shader/x-vertex">
+
+attribute  vec4 vPosition;
+attribute  vec4 vColor;
+attribute  vec2 vTexCoord;
+varying vec4 fColor;
+varying vec2 fTexCoord;
+uniform mat4 cameraViewMatrix;
+uniform mat4 projectionMatrix;
+uniform mat4 modelViewMatrix;
+ 
+//uniform vec3 theta;
+
+void main() 
+{
+         
+    fColor = vColor;
+    fTexCoord = vTexCoord;
+    vec3 pos = (modelViewMatrix * vPosition).xyz;
+    gl_Position = projectionMatrix* vec4(pos, 1.0);
+
+} 
+</script>
+
+<script id="fragment-shader" type="x-shader/x-fragment">
+
+precision mediump float;
+//Cube attributes
+varying vec4 fColor;
+varying  vec2 fTexCoord;
+
+uniform sampler2D texture;
+
+
+//If 1, spin the texture of cube 3 
+uniform int spinOn;
+uniform mat4 spinMatrix;
+//If 1, scroll the texture of cube 4
+uniform int scroll;
+uniform vec2 scrollVec;
+
+void
+main()
+{
+    //Rotate texture of Cube #3 with spinMatrix AND scroll Cube #4 with scrollVec
+    if(spinOn == 1 && scroll == 1){
+        vec4 spin =vec4(fTexCoord, 0, 0);
+        spin = spinMatrix * spin;
+        gl_FragColor = fColor + texture2D(texture, spin.xy + scrollVec);
+    }
+    //Only rotate texture of Cube #3
+   else if(spinOn == 1){
+        vec4 spin =vec4(fTexCoord, 0, 0);
+        spin = spinMatrix * spin;
+        gl_FragColor = fColor + texture2D(texture, spin.xy);
+    }
+    //Only scroll texture of Cube #4
+    else if(scroll == 1){
+        vec2 scrolling = fTexCoord + scrollVec;
+        gl_FragColor = fColor + texture2D(texture,  scrolling);
+    }
+    //Just display texture
+    else{
+       gl_FragColor = fColor + texture2D(texture, fTexCoord);
+   }
+}
+
+
+</script>
+
+<script type="text/javascript" src="./textureCube1_files/webgl-utils.js"></script>
+<script type="text/javascript" src="./textureCube1_files/initShaders.js"></script>
+<script type="text/javascript" src="./textureCube1_files/MV.js"></script>
+<script type="text/javascript" src="./textureCube1_files/textureCube1.js"></script>
+
+
+
+<canvas id="gl-canvas" width="960" height="540">
+Oops ... your browser doesn't support the HTML5 canvas element
+</canvas>
+
+</body></html>

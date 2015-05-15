@@ -1,0 +1,12 @@
+CS174A Assignment #3
+Julie Murakami
+404203662
+
+Notes:
+	My two textures used are radiator.jpg and pocahontas.jpeg found in the happyjules-a3 directory, which also contains my html file. The Javascript file is located in the textureCube_files. I started this project using the Edward Angel code from Chapter 7. 
+	First, I put the cubes in perspective by creating the modelViewMatrix, CameraViewMatrix, and projectionView. I places two cubes off-centered from the x-axis by 4 units from the origin. Next, I tried to create two separate texture for the two cubes. I found out that I could initialize the textures in the onload function but should only let the texture be binded in the render function so the two cubes can have different textures. 
+	I ran into trouble sizing the images since it was not a power of 2. I found superResizeme.com useful in resizing the pocahontas pictures so it could render. There is a color buffer from the Edward Angel code that makes each face of the cube a different color. However, since the specs to not specify any certain color, I left them in the project. 
+
+
+
+Extra Credit:
