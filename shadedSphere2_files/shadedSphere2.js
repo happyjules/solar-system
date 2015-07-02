@@ -159,19 +159,18 @@ for(var x = 0 ; x < 5; x++){
     //Used to track which points to draw for each sphere
     var start;
     var numberOfVertices;
-     var sphere = mat4();
+    var sphere = mat4();
     sphere = mult(sphere, translate(positionSun));
-     sphere = mult(sphere, viewMatrix);
-     sphere = mult(sphere, scale(enlarge[x], enlarge[x], enlarge[x]));
+    sphere = mult(sphere, viewMatrix);
+    sphere = mult(sphere, scale(enlarge[x], enlarge[x], enlarge[x]));
         
-        if(x > 0){
-       sphere = mult(sphere, rotate( speed[x-1] * time * selfRotateAngle/2, [0, 1, 0]));
+    if(x > 0){
+        sphere = mult(sphere, rotate( speed[x-1] * time * selfRotateAngle/2, [0, 1, 0]));
         sphere = mult(sphere, translate(orbit[x-1],0,0));
-        if(x == 3)
-        {
+        if(x == 3){
             bluePlanet = sphere;
         }
-  }
+      }
     gl.uniformMatrix4fv(modelViewMatrixLoc, false, flatten(sphere));
 
 //Use switch statement to make each planet's lightening and color unique. 
@@ -310,43 +309,45 @@ for(var x = 0 ; x < 5; x++){
 
 
 
-//Function that draws a sphere 
+//Function that generates the points and normals of the sphere 
 //ARGUMENTS: 
-    //numSubdivide changes the number of points used to create the sphere
-    //isFlatShading makes each triangle have a constant normal, thus a flat shading over the polygon.
-    //isSun allows the normal to point outward
-function drawSphere(numSubdivide, isFlatShading, isSun) {
-    divideTriangle(va, vb, vc, numSubdivide);
-    divideTriangle(vd, vc, vb, numSubdivide);
-    divideTriangle(va, vd, vb, numSubdivide);
-    divideTriangle(va, vc, vd, numSubdivide);
+    //numberToSubdivide - number of times to subdivide triangles to create a smoother sphere
+    //useFlatShading - bool to decide whether to use one normal per polygon/triangle face. 
+    //isSun -bool to indicate that all normals to point outward for the sun.
+function drawSphere(numberToSubdivide, useFlatShading, isSun) {
+    divideTriangle(va, vb, vc, numberToSubdivide);
+    divideTriangle(vd, vc, vb, numberToSubdivide);
+    divideTriangle(va, vd, vb, numberToSubdivide);
+    divideTriangle(va, vc, vd, numberToSubdivide);
     
     function triangle(a, b, c) {
-     pointsArray.push(a, b, c);
-      // normals are vectors    
-    if(isFlatShading){
-        var t1 = subtract(c,b);
-        var t2 = subtract(c,a);
-        var normal = vec4(normalize(cross(t1,t2)));
-        if(isSun){
+        pointsArray.push(a, b, c);
+     
+        //push normal vectors    
+        if(useFlatShading){
+          var t1 = subtract(c,b);
+          var t2 = subtract(c,a);
+          var normal = vec4(normalize(cross(t1,t2)));
+          if(isSun){
             normal = subtract(vec4(0,0,0,0), normal);
-        }
-        normalsArray.push(normal, normal, normal);
-    }
-    else{
-     // normalsArray.push(a[0],a[1], a[2], 0.0);
-     // normalsArray.push(b[0],b[1], b[2], 0.0);
-     // normalsArray.push(c[0],c[1], c[2], 0.0);
-     normalsArray.push(a, b, c);
-    }
-     index += 3;
+            }
+            normalsArray.push(normal, normal, normal);
+         }
+        else{
+         normalsArray.push(a, b, c);
+       } 
+
+       index += 3;
     }
 
     function divideTriangle(a, b, c, count) {
-    if ( count > 0 ) {   
-        var ab = mix( a, b, 0.5);
-        var ac = mix( a, c, 0.5);
-        var bc = mix( b, c, 0.5);
+        if ( count <= 0 ) {  
+            triangle(a, b, c);
+        }
+        else{ 
+         var ab = mix( a, b, 0.5);
+         var ac = mix( a, c, 0.5);
+         var bc = mix( b, c, 0.5);
                 
         ab = normalize(ab, true);
         ac = normalize(ac, true);
@@ -357,58 +358,60 @@ function drawSphere(numSubdivide, isFlatShading, isSun) {
         divideTriangle( bc, c, ac, count - 1 );
         divideTriangle( ab, bc, ac, count - 1 );
         }
-        else { 
-            triangle( a, b, c );
-        }
    }
+
 }
+
 
 
 function handleKeyDown(event){
     switch(event.keyCode){
         case 37:
-            phi += 1; // left
+            //LEFT
+            phi += 1; 
         break;
         case 38:
-            theta += 1;  //Up
+            //UP
+            theta += 1; 
         break;
         case 39:
-            phi -= 1;   //Right
+            //RIGHT
+            phi -= 1;   
         break;
         case 40:
-            theta -= 1;//DOWN
+            //DOWN
+            theta -= 1;
         break;
-        case 82:     //reset
-        xoffset = 0;
-        yoffset = 0;
-        phi = 0;
-        theta = 0;
-
+        case 82: 
+            //RESET    
+            xoffset = 0;
+            yoffset = 0;
+            phi = 0;
+            theta = 0;
         break;
         case 73:
+            //'i'
             yoffset -= 1;
-        //'i'
         break;
         case 74:
+            //'j'
             xoffset += 1;
-        //j
         break;
         case 75:
+            //'k'
             yoffset+=1;
-        //k
         break;
         case 76:
+            //'l'
             xoffset-=1;
-        //l
         break;
-
         case 78:
+            // 'n'
             fov -= 1;
-        //ne
         break;
         case 87:
+            //'w'
             fov +=1
-        //Ws
         break;
         default:
         break;
