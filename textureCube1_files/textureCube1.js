@@ -311,7 +311,6 @@ var render = function(time){
     //Set cube in model view
     var cube = mat4();
     cube = mult(cube, cameraViewMatrix);
-   
     cube = mult(cube, translate(vec3(4,0,0)));
     cube = mult(cube, scale(3,3,3));
 
